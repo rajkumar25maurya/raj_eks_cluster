@@ -1,39 +1,39 @@
----
 apiVersion: karpenter.sh/v1alpha5
 kind: Provisioner
 metadata:
-  name: default
+  name: golang
 spec:
-  ttlSecondsAfterEmpty: 60 # scale down nodes after 60 seconds without workloads (excluding daemons)
-  ttlSecondsUntilExpired: 604800 # expire nodes after 7 days (in seconds) = 7 * 60 * 60 * 24
+  # labels:
+  #   workload-type/golang: "true"
   limits:
     resources:
-      cpu: "1000"
-      memory: "4000Gi"
+      cpu: 1k
+      memory: 1000Gi
+  provider:
+    apiVersion: extensions.karpenter.sh/v1alpha1
+    kind: AWS
+    securityGroupSelector:
+      kubernetes.io/cluster/Raj-Dev: shared
+    subnetSelector:
+      kubernetes.io/cluster/Raj-Dev: shared
   requirements:
-    # Include general purpose instance families
-    - key: karpenter.k8s.aws/instance-family
-      operator: In
-      values: ["c5", "m5", "t3", "c4", "m4", "t2"]
-    # Exclude small instance sizes
-    - key: karpenter.k8s.aws/instance-size
-      operator: NotIn
-      values: [nano, micro]
-    - key: "kubernetes.io/arch"
-      operator: In
-      values: ["x86_64"]
-    - key: "karpenter.sh/capacity-type"
-      operator: In
-      values: ["on-demand"]
-  providerRef:
-    name: my-provider
----
-apiVersion: karpenter.k8s.aws/v1alpha1
-kind: AWSNodeTemplate
-metadata:
-  name: my-provider
-spec:
-  subnetSelector:
-    kubernetes.io/cluster/Raj-Dev: shared
-  securityGroupSelector:
-    kubernetes.io/cluster/Raj-Dev: shared
+  - key: node.kubernetes.io/instance-type
+    operator: In
+    values:
+    - c5.2xlarge
+    - c5.large
+    - c5.xlarge
+  - key: karpenter.sh/capacity-type
+    operator: In
+    values:
+    - on-demand
+  - key: kubernetes.io/arch
+    operator: In
+    values:
+    - amd64
+  # taints:
+  # - effect: NoSchedule
+  #   key: workload-type/golang
+  #   value: "true"
+  # ttlSecondsAfterEmpty: 30
+  # ttlSecondsUntilExpired: 172800
