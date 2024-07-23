@@ -1,0 +1,5 @@
+*.tfstate
+.git
+.terrafirn
+.terraformrc
+terraform.rc
