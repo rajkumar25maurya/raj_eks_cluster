@@ -1,5 +1,5 @@
-*.tfstate
 .git
+*.tfstate
 .terrafirn
 .terraformrc
 terraform.rc
