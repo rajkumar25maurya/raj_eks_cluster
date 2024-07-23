@@ -1,7 +1,8 @@
 # raj_eks_cluster
 # run below command to create cluster
 sh init.sh dev apply Dev.tfvars
-# for Destrory
+# for Destrory 
+sh init.sh dev destroy Dev.tfvars
 ##
 Argument $1 = Enviornment
 Argument $2 == apply ro destroy
