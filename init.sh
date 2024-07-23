@@ -6,10 +6,10 @@ if [ -z "$1" ]; then
   exit 1
 fi
 
-ENVIRONMENT=$1
+ENVIRONMENT=`echo $1 | tr 'A-Z' 'a-z'`
 BUCKET_NAME="raj-eks-tfstate-${ENVIRONMENT}"
 REGION="us-east-1"
-apply_or_destroy=$2
+apply_or_destroy=`echo $2 | tr 'A-Z' 'a-z'`
 TF_VARS=$3
 
 # Validate environment name (should not be empty or whitespace)
@@ -18,14 +18,9 @@ if [ -z "$ENVIRONMENT" ] || [ "$ENVIRONMENT" = " " ]; then
   exit 1
 fi
 
-if ! echo "$BUCKET_NAME" | grep -Eq '^[a-z0-9.-]{3,63}$'; then
-  echo "Error: The bucket name '$BUCKET_NAME' is not valid."
-  exit 1
-fi
-
 aws s3api head-bucket --bucket $BUCKET_NAME
 if [ $? -eq 0 ]; then
-    echo "$$BUCKET_NAME Exist.."
+    echo "$BUCKET_NAME Exist.."
 else
     aws s3api create-bucket --bucket $BUCKET_NAME --region ${REGION} &> /dev/null
 fi

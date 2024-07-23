@@ -1,13 +1,13 @@
 region                  = "us-east-2"
-eks_version             = "1.28"
+eks_version             = "1.29"
 https_port              = 443
 eks_cluster_name        = "Raj-Dev"
 node_group_name         = "Raj-Dev-NodeGroup"
 master_eks_role         = "Raj-Dev_master-eks-role"
 worker_eks_role         = "raj-worker-eks-role"
-instance_type           = "t2.large"
+instance_type           = "t2.2xlarge"
 desire_size             = 2
-max_size                = 3
+max_size                = 5
 min_size                = 2
 ami_type                = "AL2_x86_64"
 disk_size               = 50
